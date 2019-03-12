@@ -97,6 +97,8 @@ namespace GirlsFrontline_Downloader
             }
             fileStream.Close();
             streamReader.Close();
+            Console.WriteLine("All the download links have been vistited.");
+            Console.ReadLine();
             /*}
             catch
             {
