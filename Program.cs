@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,7 +43,13 @@ namespace GirlsFrontline_Downloader
             var content = streamReader.ReadLine();
             var count = 0;
             //var myWebClient = new WebClient();
+            /*
+            var handler = new WebRequestHandler();
+            X509Certificate2 certificate = GetMyX509Certificate();
+            handler.ClientCertificates.Add(certificate);
+            */
             var client = new HttpClient();
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             client.DefaultRequestHeaders.Connection.Add("keep-alive");
             while (content != null)
             {
@@ -59,7 +66,7 @@ namespace GirlsFrontline_Downloader
                 {
                     //myWebClient.DownloadFile(url, downloadPath);
                     var picContent = await client.GetByteArrayAsync(url);
-                    var strPicContent = System.Text.Encoding.Default.GetString(picContent);
+                    var strPicContent = Encoding.Default.GetString(picContent);
                     if (strPicContent.Substring(0, 15) == "<!DOCTYPE html>") {
                         Console.WriteLine("[ERROR] " + url);
                     } else {
