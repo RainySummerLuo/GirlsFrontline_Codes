@@ -2,8 +2,8 @@
 using System.IO;
 using System.Net.Http;
 using System.Text;
-using System.Web;
 using System.Threading.Tasks;
+using System.Web;
 
 // ReSharper disable once IdentifierTypo
 namespace GirlsFrontline_Downloader
@@ -21,33 +21,59 @@ namespace GirlsFrontline_Downloader
                 serverInput = Console.ReadLine();
             } while (serverInput != "en" && serverInput != "cn");
             var filePath = Path.Combine(dirPath + @"\wiki-" + serverInput + ".html");
-            FileStream fileStream = null;
-            StreamReader streamReader = null;
-            try
-            {
-                fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-                streamReader = new StreamReader(fileStream, Encoding.Default);
-                fileStream.Seek(0, SeekOrigin.Begin);
+            /*try
+            {*/
+            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            var streamReader = new StreamReader(fileStream, Encoding.Default);
+            fileStream.Seek(0, SeekOrigin.Begin);
 
-                var content = streamReader.ReadLine();
-                var count = 0;
-                //var myWebClient = new WebClient();
-                var client = new HttpClient();
-                while (content != null)
+            string serverName = null;
+            switch (serverInput)
+            {
+                case "cn":
+                    serverName = "http://www.gfwiki.org";
+
+                    break;
+                case "en":
+                    serverName = "https://www.gfwiki.com";
+                    break;
+            }
+
+            var content = streamReader.ReadLine();
+            var count = 0;
+            //var myWebClient = new WebClient();
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Connection.Add("keep-alive");
+            while (content != null)
+            {
+                var uriSplit = content.Split(Convert.ToChar("\""));
+                var url = serverName + uriSplit[1].Trim();
+                var localPath = url.Split('/')[6].Trim();
+                var downloadPath = Path.Combine(Path.Combine(dirPath + @"download\" + serverInput + @"\") +
+                                                HttpUtility.UrlDecode(localPath, Encoding.UTF8));
+                var picBool = true;
+                if (serverInput == "cn") {
+                    picBool = (localPath.Substring(0, 3) == "Pic");
+                }
+                if (picBool && File.Exists(downloadPath) == false)
                 {
-                    count++;
-                    var uriSplit = content.Split(Convert.ToChar("\""));
-                    var url = "http://www.gfwiki.org" + uriSplit[1].Trim();
-                    var localPath = url.Split('/')[6].Trim();
-                    var downloadPath = Path.Combine(Path.Combine(dirPath + @"download\" + serverInput + @"\") + HttpUtility.UrlDecode(localPath, Encoding.UTF8));
                     //myWebClient.DownloadFile(url, downloadPath);
                     var picContent = await client.GetByteArrayAsync(url);
-                    var fs = new FileStream(downloadPath, FileMode.Create);
-                    fs.Write(picContent, 0, picContent.Length);
-                    Console.WriteLine("[NO."+ count +" Download] " + url);
-                    content = streamReader.ReadLine();
+                    var strPicContent = System.Text.Encoding.Default.GetString(picContent);
+                    if (strPicContent.Substring(0, 15) == "<!DOCTYPE html>") {
+                        Console.WriteLine("[ERROR] " + url);
+                    } else {
+                        count++;
+                        var fs = new FileStream(downloadPath, FileMode.Create);
+                        fs.Write(picContent, 0, picContent.Length);
+                        Console.WriteLine("[NO." + count + " Download] " + url);
+                    }
                 }
+                content = streamReader.ReadLine();
             }
+            fileStream.Close();
+            streamReader.Close();
+            /*}
             catch
             {
                 // ignored
@@ -56,7 +82,7 @@ namespace GirlsFrontline_Downloader
             {
                 fileStream?.Close();
                 streamReader?.Close();
-            }
+            }*/
         }
 
         /*
