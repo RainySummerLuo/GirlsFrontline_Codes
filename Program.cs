@@ -29,16 +29,8 @@ namespace GirlsFrontline_Downloader
             fileStream.Seek(0, SeekOrigin.Begin);
 
             string serverName = null;
-            switch (serverInput)
-            {
-                case "cn":
-                    serverName = "http://www.gfwiki.org";
-
-                    break;
-                case "en":
-                    serverName = "https://www.gfwiki.com";
-                    break;
-            }
+            if (serverInput == "cn") serverName = "http://www.gfwiki.org";
+            if (serverInput == "en") serverName = "https://www.gfwiki.com";
 
             var content = streamReader.ReadLine();
             var count = 0;
