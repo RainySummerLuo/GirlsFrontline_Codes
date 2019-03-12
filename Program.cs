@@ -87,7 +87,6 @@ namespace GirlsFrontline_Downloader
         /*
         private static void Downloader(string url, string filepath)
         {
-
         }
         */
     }
