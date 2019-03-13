@@ -14,7 +14,7 @@ namespace GirlsFrontline_Downloader
         private static async Task Main()
         {
             var dirPath = Environment.CurrentDirectory;
-            dirPath = Path.Combine(Directory.GetParent(Directory.GetParent(dirPath).ToString()) + @"\data\");
+            dirPath = Path.Combine(dirPath + @"\data\");
             if (!Directory.Exists(Path.Combine(dirPath + @"download\")))
             {
                 Directory.CreateDirectory(Path.Combine(dirPath + @"download\"));
