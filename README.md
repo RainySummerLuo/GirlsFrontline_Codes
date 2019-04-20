@@ -1,2 +1,2 @@
 # GirlsFrontline_Downloader
-![Screenshot](./Screenshot.jpg)
+![Screenshot](./GF_Downloader/Screenshot.jpg)
