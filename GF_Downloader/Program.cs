@@ -146,7 +146,7 @@ namespace GirlsFrontline_Downloader
             }
             fs.Close();
             sr.Close();
-            Console.WriteLine("All download links have been vistited.");
+            Console.WriteLine("All images have been downloaded. Press [Enter] to exit.");
             Console.ReadLine();
         }
     }
