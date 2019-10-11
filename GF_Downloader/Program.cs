@@ -97,12 +97,19 @@ namespace GirlsFrontline_Downloader
                 var imageWidth = sizeSplit[0].Trim();
                 var imageHeight = sizeSplit[1].Trim();
                 int.TryParse(imageWidth.Replace(",", ""), out var intImageWidth);
-                bool picBool;
-                if (server == "cn") {
-                    picBool = (filename.Substring(0, 3) == "Pic");
-                }
-                else {
-                    picBool = (imageWidth == imageHeight &&  intImageWidth >= 1024);
+                
+                bool picBool = false;
+                switch (server)
+                {
+                    case "cn":
+                        picBool = (filename.Substring(0, 3) == "Pic");
+                        break;
+                    case "en":
+                        picBool = (imageWidth == imageHeight &&  intImageWidth >= 1024);
+                        break;
+                    case "jp":
+                        picBool = (filename.Contains("%E7%AB%8B%E7%B5%B5"));
+                        break;
                 }
                 if (!picBool) continue;
                 if (File.Exists(downloadPath))
