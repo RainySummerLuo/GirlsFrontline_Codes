@@ -93,11 +93,23 @@ namespace GirlsFrontline_Downloader
                 var filename = filenameSplit[filenameSplit.Length - 1].Trim();
                 var downloadPath = Path.Combine(downServerPath +
                                                 HttpUtility.UrlDecode(filename, Encoding.UTF8));
-                var picBool = true;
+                var sizeSplit = line.Split(new[] {" . . "}, StringSplitOptions.None)[1].Split('×');
+                var imageWidth = sizeSplit[0].Trim();
+                var imageHeight = sizeSplit[1].Trim();
+                int.TryParse(imageWidth.Replace(",", ""), out var intImageWidth);
+                bool picBool;
                 if (server == "cn") {
                     picBool = (filename.Substring(0, 3) == "Pic");
                 }
-                if (!picBool || File.Exists(downloadPath)) continue;
+                else {
+                    picBool = (imageWidth == imageHeight &&  intImageWidth >= 1024);
+                }
+                if (!picBool) continue;
+                if (File.Exists(downloadPath))
+                {
+                    Console.WriteLine("[ERROR] " + filename + " already existed.");
+                    continue;
+                }
                 byte[] picContent;
                 try
                 {

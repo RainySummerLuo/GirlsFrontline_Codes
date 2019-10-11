@@ -8,7 +8,8 @@ Girls' Frontline Characters Image Download Tool
 
 You can download from GF wiki of CN/EN/JP.
 
-Currently only CN's Girls' Frontline wiki has a specific naming rule for the characters image, and therefore these can be specifically downloaded. For other wikis, all `png` files have to be downloaded and it's a huge amount of files.
+Currently only CN's Girls' Frontline wiki has a specific naming rule for the characters image, and therefore these can be specifically downloaded. For other wikis, we use a mechanism of downloading only the images that are `png`, with the same width and height (a square one), and width and height are at least `1024px`.
+
 Also, JP's wiki has a slow speed, at least for the network here.
 
 Features:
