@@ -98,17 +98,18 @@ namespace GirlsFrontline_Downloader
                 var imageHeight = sizeSplit[1].Trim();
                 int.TryParse(imageWidth.Replace(",", ""), out var intImageWidth);
                 
-                bool picBool = false;
+                var picBool = false;
+                // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (server)
                 {
                     case "cn":
-                        picBool = (filename.Substring(0, 3) == "Pic");
+                        picBool = (filename.Substring(0, 3).ToLower() == "pic");
                         break;
                     case "en":
-                        picBool = (imageWidth == imageHeight &&  intImageWidth >= 1024);
+                        picBool = (imageWidth == imageHeight && intImageWidth >= 1024) && (!filename.ToLower().Contains("texture") && (!filename.ToLower().Contains("furniture")));
                         break;
                     case "jp":
-                        picBool = (filename.Contains("%E7%AB%8B%E7%B5%B5"));
+                        picBool = (filename.Contains("%E7%AB%8B%E7%B5%B5") && !filename.Contains("%E5%A6%96%E7%B2%BE"));
                         break;
                 }
                 if (!picBool) continue;
